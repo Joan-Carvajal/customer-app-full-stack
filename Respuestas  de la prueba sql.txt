@@ -1,0 +1,114 @@
+Primera parte:
+Respuetas 
+1) ¿Qué fila queda de (primero) del conjunto de resultados devuelto por la instrucción SQL?
+
+	A. Fila Una
+
+2) ¿Cuántas filas son devueltas por la siguiente consulta?
+	B. Una
+
+3) ¿Cuántas filas son devueltas por la siguiente consulta SQL?
+	C. Tres
+
+4) ¿Qué consulta produce los mismos resultados que la consulta siguiente?
+	A. select ln,fn from a where ln in (select ln from b where sex='m')
+
+5) ¿Refiriéndose a la tabla, Cual de las siguientes sentencias SQL contiene un error?
+	C. select a b c d from vtable
+
+6) ¿Cuántas filas se insertan en newtable?
+	D. Tres
+
+7) ¿Cuántas filas son devueltas por la siguiente consulta?
+	B. Dos
+
+8) ¿Cuántas filas son devueltas por la consulta siguiente?
+	B. Siete
+9) ¿En relación con el código de ejemplo, Cual es el número de filas devueltas por la 
+consulta?
+	A. Una
+10) ¿Refiriéndose a la tabla, Cuales filas que se actualizan?
+	B. 2 Wheel 110.000
+	1 Axle 220.000
+	4 Door 330.000
+
+
+Segunda parte:
+1. Listado de facturas registradas en todo el año 2017
+SELECT *
+FROM dbo.Facturas
+WHERE YEAR(FechaRegistro) = 2017;
+
+2. Listado de facturas de exportación con IVA mayor de 2.000.000
+SELECT *
+FROM dbo.Facturas
+WHERE Exportacion = 1 
+  AND ValorIVA > 2000000;
+
+3. Listado de facturas del vendedor kperez que superaron los 10.000.000 de valor total
+SELECT *
+FROM dbo.Facturas
+WHERE Vendedor = 'kperez' 
+  AND ValorTotal > 10000000;
+
+4. Listado de facturas registradas por el usuario rsolano
+SELECT *
+FROM dbo.Facturas
+WHERE Usuario = 'rsolano';
+
+5. Ventas totales por bodegas
+SELECT 
+    Bodega,
+    SUM(ValorTotal) AS VentasTotales
+FROM dbo.Facturas
+GROUP BY Bodega
+ORDER BY VentasTotales DESC;
+
+6. Listado de productos de la factura con NumFactura = S00256, ordenado por cantidad de mayor a menor
+SELECT 
+    df.Producto,
+    df.Cantidad,
+    df.Valor,
+    df.Lote
+FROM dbo.DetalleFactura df
+INNER JOIN dbo.Facturas f ON df.IdFactura = f.Id
+WHERE f.NumFactura = 'S00256'
+ORDER BY df.Cantidad DESC;
+
+7. Cantidad de productos por facturas de mayo del 2018
+SELECT 
+    f.NumFactura,
+    f.Cliente,
+    COUNT(df.Id) AS CantidadProductos,
+    SUM(df.Cantidad) AS CantidadTotal
+FROM dbo.Facturas f
+INNER JOIN dbo.DetalleFactura df ON f.Id = df.IdFactura
+WHERE YEAR(f.FechaRegistro) = 2018 
+  AND MONTH(f.FechaRegistro) = 5
+GROUP BY f.NumFactura, f.Cliente
+ORDER BY CantidadProductos DESC;
+
+8. Listado de productos de las facturas del mes de enero del 2018
+SELECT DISTINCT
+    df.Producto,
+    SUM(df.Cantidad) AS CantidadTotal,
+    SUM(df.Valor * df.Cantidad) AS ValorTotal
+FROM dbo.DetalleFactura df
+INNER JOIN dbo.Facturas f ON df.IdFactura = f.Id
+WHERE YEAR(f.FechaRegistro) = 2018 
+  AND MONTH(f.FechaRegistro) = 1
+GROUP BY df.Producto
+ORDER BY CantidadTotal DESC;
+
+
+
+10. Promedio de ventas por años
+SELECT 
+    YEAR(FechaRegistro) AS Anio,
+    COUNT(*) AS NumeroFacturas,
+    AVG(ValorTotal) AS PromedioVentas,
+    SUM(ValorTotal) AS TotalVentas
+FROM dbo.Facturas
+GROUP BY YEAR(FechaRegistro)
+ORDER BY Anio DESC;
+

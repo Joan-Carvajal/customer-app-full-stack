@@ -27,7 +27,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/customer")
 @SecurityRequirement(name = "bearer-key")
-
 public class CustomerController {
 
     private final CustomerRepository repository;

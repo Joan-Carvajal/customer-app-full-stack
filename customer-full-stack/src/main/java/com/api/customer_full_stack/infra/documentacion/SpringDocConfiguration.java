@@ -18,7 +18,7 @@ public class SpringDocConfiguration {
                         .addSecuritySchemes("bearer-key",
                                 new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
                 .info(new Info()
-                        .title("Voll.med API")
+                        .title("Customer API")
                         .description("Api rest para un crud de clientes (customers) con autenticacion usando JWT ")
                         .contact(new Contact()
                                 .name("Joan")
